@@ -46,88 +46,43 @@ def is_bold(run):
     return run.bold
 
 
-# def generate_table(header, rows):
-#     table_html = "<table border='1'>"
-#     table_html += "<tr>"
-
-#     # Add empty header columns on each side
-#     table_html += "<th></th>"
-#     for col in header:
-#         if col != header[1] and col != header[3]:
-#             table_html += f"<th>{col}</th>"
-#     table_html += "<th></th>"
-#     table_html += "</tr>"
-
-#     if rows:
-#         try:
-#             k = int(header[-1])
-#             if k > 0:
-#                 cell_contents = [[] for _ in range(len(header) - 2)]
-
-#                 for i, row in enumerate(rows):
-#                     for j, cell in enumerate(row[:1] + row[2:3] + row[4:]):
-#                         cell_content = cell.split(',')
-#                         cell_contents[j].extend(cell_content)
-
-#                 items_per_cell = max(len(content) // k + (1 if len(content) % k > 0 else 0) for content in cell_contents)
-
-#                 for i in range(k):
-#                     table_html += "<tr>"
-#                     # Add empty column on the left
-#                     table_html += f"<tr><td>{i + 1}</td>"
-#                     for j in range(len(header) - 2):
-#                         start_idx = i * items_per_cell
-#                         end_idx = (i + 1) * items_per_cell
-#                         table_html += f"<td>{', '.join(cell_contents[j][start_idx:end_idx])}</td>"
-#                     # Add empty column on the right
-#                     table_html += "<td></td>"
-#                     table_html += "</tr>"
-
-#         except ValueError:
-#             pass
-
-#     table_html += "</table>"
-#     return table_html
-
-
 
 def generate_table(header, rows):
     table_html = "<table border='1'>"
     table_html += "<tr>"
 
-    # Exclude the second and fourth columns from the header
+    
     for i, col in enumerate(header):
         if i != 1 and i != 3:
             table_html += f"<th>{col}</th>"
     table_html += "</tr>"
 
     if rows:
-        # Extract 'k' value from the last column of the header
+        
         try:
             k = int(header[-1])
             if k > 0:
-                cell_contents = [[] for _ in range(len(header) - 2)]  # Exclude the second and fourth columns
+                cell_contents = [[] for _ in range(len(header) - 2)]  
 
                 for i, row in enumerate(rows):
-                    for j, cell in enumerate(row[:1] + row[2:3] + row[4:]):  # Exclude the second and fourth columns
-                        # Split content inside each cell and distribute equally
+                    for j, cell in enumerate(row[:1] + row[2:3] + row[4:]): 
+                       
                         cell_content = cell.split(',')
                         cell_contents[j].extend(cell_content)
 
-                # Calculate the number of items in each cell
                 items_per_cell = max(len(content) // k + (1 if len(content) % k > 0 else 0) for content in cell_contents)
 
-                # Distribute the items evenly among the rows for each cell
+                
                 for i in range(k):
                     table_html += "<tr>"
-                    for j in range(len(header) - 2):  # Exclude the second and fourth columns
+                    for j in range(len(header) - 2):  
                         start_idx = i * items_per_cell
                         end_idx = (i + 1) * items_per_cell
                         table_html += f"<td>{', '.join(cell_contents[j][start_idx:end_idx])}</td>"
                     table_html += "</tr>"
 
         except ValueError:
-            pass  # Handle the case where the last column is not an integer
+            pass  
 
     table_html += "</table>"
     return table_html
