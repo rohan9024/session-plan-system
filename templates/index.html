@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="text/css" href="https://siesgst.edu.in/images/logo_50x50.png">
+    <title>SIES | GST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <header class="col">
+            <div>
+                <img src="static/images/sies_gst_logo.jpg" alt="Logo">
+            </div>
+            <div class="mx-auto">
+                <span class="customLabel">SIES GRADUATE SCHOOL OF TECHNOLOGY</span>
+            </div>
+        </header>
+    </div>
+</div>
+
+<!-- Main Container -->
+    <div class="container">
+        
+
+        
+        <div class="container">
+            <h1 class="collapsible-title" onclick="toggleInputs()">Course Plan</h1>
+        
+            <div class="collapsible-content">
+                <div class="form-row mt-4"> 
+                    <!-- Row 1 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input1" placeholder="Semester">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input2" placeholder="Year">
+                    </div>
+        
+                    <!-- Row 2 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input3" placeholder="Course Title">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input4" placeholder="Course Code">
+                    </div>
+        
+                    <!-- Row 3 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input5" placeholder="Total Contact Hours">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input6" placeholder="Duration of TEE">
+                    </div>
+        
+                    <!-- Row 4 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input7" placeholder="TEE Marks">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input8" placeholder="IA Marks">
+                    </div>
+        
+                    <!-- Row 5 -->
+                    <div class="form-group col-4 mt-2">
+                        <input type="text" class="form-control common-input" id="input9" placeholder="Subject In-charge">
+                    </div>
+                    <div class="form-group col-4 mt-2">
+                        <input type="text" class="form-control common-input" id="input10" placeholder="Course Coordinator">
+                    </div>
+        
+                    <!-- Row 6 -->
+                    <div class="form-group col-12 mt-2">
+                        <button class="print-plan" onclick="collectAndStoreInputs()">Print Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+            <div class="container">
+                <h1 class="collapsible-title" onclick="toggleOutcomes()">
+                    Course Outcomes 
+                    <span class="add-icon" onclick="addOutcome()">+</span>
+                </h1>
+                <div class="outcomes-container">
+                    <div class="form-row mt-2">
+                        <div class="form-group col-12">
+                            <span id="outcomesText" style="display: none;">Add Course Outcomes</span>
+                        </div>
+                        <button class="print-button" onclick="printOutcomes()">Print Outcomes</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+    <div class="container">
+        <h1 class="collapsible-title" onclick="toggleOutcomeTableVisibility()">Course Articulation Matrix</h1>
+        <div class="course-outcomes-container">
+            <div class="form-row mt-2">
+                <div class="form-group col-12">
+                    <div id="courseOutcomesContainer" class="new-outcomes-container show">
+                        <script>
+                            function createOutcomeTable(outcomes) {
+                                if (!outcomes || outcomes.length === undefined) {
+                                    console.error('Invalid outcomes array:', outcomes);
+                                    return;
+                                }
+
+                                var container = document.getElementById('courseOutcomesContainer');
+                                container.innerHTML = '';
+                                var table = document.createElement('table');
+                                table.classList.add('table'); 
+                                var headerRow = table.insertRow(0);
+                                headerRow.insertCell(0).textContent = 'Serial Number';
+                                headerRow.insertCell(1).textContent = 'Outcome Description';
+                                for (var i = 2; i < 16; i++) {
+                                    var columnName;
+                                    if (i >= 2 && i <= 13) {
+                                        columnName = (i - 1).toString();
+                                    } else if (i === 14) {
+                                        columnName = 'PS O1';
+                                    } else if (i === 15) {
+                                        columnName = 'PS O2';
+                                    }
+                                    headerRow.insertCell(i).textContent = columnName;
+                                }
+
+                                var numberOfOutcomes = outcomes.length;
+                                for (var row = 1; row <= numberOfOutcomes; row++) {
+                                    var outcomeRow = table.insertRow(row);
+                                    outcomeRow.insertCell(0).textContent = row;
+                                    outcomeRow.insertCell(1).textContent = outcomes[row - 1];
+                                    for (var col = 2; col < 16; col++) {
+                                        var inputCell = outcomeRow.insertCell(col);
+                                        var inputField = document.createElement('input');
+                                        inputField.type = 'text';
+                                        inputField.classList.add('form-control');
+                                        inputCell.appendChild(inputField);
+                                    }
+                                }
+                                container.appendChild(table);
+                            }
+
+                            
+                            createOutcomeTable();
+
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                                toggleOutcomeTableVisibility();
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+
+
+
+    
+        <div class="file-input-container">
+                <input type="file" id="wordFileInput1" accept=".docx" class="d-none file" onchange="updateFileNames()">
+                <label for="wordFileInput1" id="fileInputLabel1" class="label">Choose File</label>  
+                <button id="readDocumentButton1" class="read" onclick="readWordDocuments()">Read Document</button>
+        </div>
+    
+        <div id="documentContent1"></div>
+  
+
+
+
+
+
+        <div class="file-input-container">
+            <input type="file" id="wordFileInput" accept=".docx" class="d-none file" onchange="updateFileName()">
+            <label for="wordFileInput" id="fileInputLabel" class="label1">Choose File</label>
+            <button id="readDocumentButton" class="read" onclick="readWordDocument()">Read Document</button>
+        </div>
+        
+
+        <div class="form-group mt-4">
+            <input type="text" class="form-control mb-2 inputvalues" id="searchTerm" aria-label="Search Term"
+                placeholder="Search Term">
+            <button class="mb-2" id="searchTableButton" onclick="searchTable()">Search Table</button>
+        </div>
+
+        <div id="documentContent"></div>
+
+
+        <form>
+            <div class="form-row">
+                <div class="custom-form-group mt-4 mb-3">
+                    <label for="startDate" class="date-label">From</label>
+                    <input type="date" class="form-control form-control-md date-input" id="startDate">
+                </div>
+                <div class="custom-form-group mt-4 mb-3">
+                    <label for="endDate" class="date-label">To</label>
+                    <input type="date" class="form-control form-control-md date-input" id="endDate">
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="text" class="form-control mb-2 inputvalues" id="ignoreDates" aria-label="Ignore Dates"
+                    placeholder="Holidays (DD-MM-YYYY,DD-MM-YYYY)">
+            </div>
+
+        </form>
+
+        <div>
+            <button  id="printDates" onclick="printDates()">Print Dates</button>
+        </div>
+
+
+        <div id="result" class="mt-5"></div>
+
+
+
+        <div class="text-center mt-4">
+                <input type="file" id="excelFile" accept=".xlsx" class="hidden" onchange="updateAndDownload()">
+                <label for="excelFile" id="excelInputLabel" class="custom-button">Upload Excel File</label>
+        </div>
+
+
+        
+    </div>
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
